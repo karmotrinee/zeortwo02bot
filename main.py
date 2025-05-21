@@ -20,18 +20,20 @@ def tradingview_webhook():
     message = f"📈 트레이딩뷰 시그널\n\n🪙 종목: {symbol}\n💵 가격: {price}\n📌 시그널: {signal}\n⏰ 시간: {time}"
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {'chat_id': TELEGRAM_CHAT_ID, 'text': message}
+    payload = {
+        'chat_id': TELEGRAM_CHAT_ID,
+        'text': message
+    }
 
-    # 텔레그램 전송 요청
-    res = requests.post(url, data=payload)
-
-    # ✅ 응답 로그 출력
-    print("📤 텔레그램 응답 코드:", res.status_code)
-    print("📩 텔레그램 응답 내용:", res.text)
+    try:
+        res = requests.post(url, data=payload)
+        print("📤 텔레그램 응답 코드:", res.status_code)
+        print("📩 텔레그램 응답 내용:", res.text)
+    except Exception as e:
+        print("❌ 텔레그램 전송 중 예외 발생:", str(e))
 
     return 'ok', 200
 
-# Render 포트 바인딩
+# Render용 포트 바인딩
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
-
