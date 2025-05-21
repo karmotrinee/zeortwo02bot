@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# 텔레그램 환경변수 가져오기
+# 환경변수에서 토큰과 채팅 ID 불러오기
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
 
@@ -21,10 +21,17 @@ def tradingview_webhook():
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {'chat_id': TELEGRAM_CHAT_ID, 'text': message}
-    requests.post(url, data=payload)
+
+    # 텔레그램 전송 요청
+    res = requests.post(url, data=payload)
+
+    # ✅ 응답 로그 출력
+    print("📤 텔레그램 응답 코드:", res.status_code)
+    print("📩 텔레그램 응답 내용:", res.text)
 
     return 'ok', 200
 
-# ✅ Render 포트 바인딩 명시
+# Render 포트 바인딩
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
+
